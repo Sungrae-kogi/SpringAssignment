@@ -4,10 +4,9 @@ import com.sparta.springjuniorpersonalassignment.dto.ScheduleRequestDto;
 import com.sparta.springjuniorpersonalassignment.dto.ScheduleResponseDto;
 import com.sparta.springjuniorpersonalassignment.service.ScheduleService;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -29,6 +28,20 @@ public class ScheduleController {
 
         return scheduleService.createSchedule(scheduleRequestDto);
 
+    }
 
+    @GetMapping("/schedule/{id}")
+    public ScheduleResponseDto getSchedule(@PathVariable Long id) {
+        // 객체간 이동 위해 ScheduleService 객체 생성
+        ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
+
+        return scheduleService.getSchedule(id);
+
+    }
+
+    @GetMapping("/schedule/all")
+    public List<ScheduleResponseDto> getAllSchedules() {
+        ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
+        return scheduleService.getAllSchedules();
     }
 }

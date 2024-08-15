@@ -1,12 +1,17 @@
 package com.sparta.springjuniorpersonalassignment.repository;
 
+import com.sparta.springjuniorpersonalassignment.dto.ScheduleResponseDto;
 import com.sparta.springjuniorpersonalassignment.entity.Schedule;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public class ScheduleRepository {
     private final JdbcTemplate jdbcTemplate;
@@ -40,4 +45,64 @@ public class ScheduleRepository {
 
         return schedule;
     }
+
+    //단일 정보 조회
+    public Schedule findById(Long id) {
+        // DB 조회
+        String sql = "SELECT * FROM schedule WHERE id = ?";
+
+        return jdbcTemplate.query(sql, resultSet -> {
+            if (resultSet.next()) {
+                Schedule schedule = new Schedule();
+                schedule.setId(resultSet.getLong("id"));
+                schedule.setTitle(resultSet.getString("title"));
+                schedule.setContents(resultSet.getString("contents"));
+                schedule.setWriter(resultSet.getString("writer"));
+                schedule.setWritedate(resultSet.getString("writedate"));
+                return schedule;
+            } else {
+                return null;
+            }
+        }, id);
+
+
+
+    }
+
+    //모든 정보 조회
+    public List<ScheduleResponseDto> findAll() {
+        // DB 조회
+        String sql = "SELECT * FROM schedule";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) -> {
+            // SQL 의 결과로 받아온 Memo 데이터들을 MemoResponseDto 타입으로 변환해줄 메서드
+            Long id = rs.getLong("id");
+            String title = rs.getString("title");
+            String contents = rs.getString("contents");
+            String writer = rs.getString("writer");
+            String writedate = rs.getString("writedate");
+            return new ScheduleResponseDto(id, title, contents, writer, writedate);
+        });
+    }
+
+    //단일 정보 조회
+    public Schedule findId(Long id) {
+        // DB 에서 ID로 찾아내는 쿼리
+        String sql = "SELECT * FROM schedule WHERE id = ?";
+
+        return jdbcTemplate.query(sql, resultSet -> {
+            if (resultSet.next()) {
+                Schedule schedule = new Schedule();
+                schedule.setTitle(resultSet.getString("title"));
+                schedule.setContents(resultSet.getString("contents"));
+                schedule.setWriter(resultSet.getString("writer"));
+                schedule.setWritedate(resultSet.getString("writedate"));
+                return schedule;
+            } else {
+                return null;
+            }
+        }, id);
+
+    }
+
 }
