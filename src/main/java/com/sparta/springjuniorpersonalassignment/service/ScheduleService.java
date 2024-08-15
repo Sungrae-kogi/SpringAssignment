@@ -25,7 +25,7 @@ public class ScheduleService {
         // DB 저장
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
 
-        Schedule saveSchedule = scheduleRepository.save(schedule);
+        Schedule saveSchedule = scheduleRepository.create(schedule);
 
         //Entity -> ResponseDto
         ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(saveSchedule);
@@ -47,5 +47,12 @@ public class ScheduleService {
         ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
 
         return scheduleRepository.findAll();
+    }
+
+    //READ ALL BY CONDITION
+    public List<ScheduleResponseDto> getConditionedSchedules(String updateDate, String writer) {
+        ScheduleRepository scheduleRepository = new ScheduleRepository(jdbcTemplate);
+
+        return scheduleRepository.findAllByCondition(updateDate, writer);
     }
 }

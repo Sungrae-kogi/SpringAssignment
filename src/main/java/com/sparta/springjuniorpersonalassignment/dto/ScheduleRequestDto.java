@@ -12,4 +12,5 @@ public class ScheduleRequestDto {
     private String writer;
     private String password;
     private String writedate;
+    private String updatedate;
 }

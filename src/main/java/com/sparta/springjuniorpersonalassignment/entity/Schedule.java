@@ -16,6 +16,7 @@ public class Schedule {
     private String writer;
     private String password;
     private String writedate;
+    private String updatedate;
 
     public Schedule(ScheduleRequestDto scheduleRequestDto) {
         this.title = scheduleRequestDto.getTitle();
@@ -23,5 +24,7 @@ public class Schedule {
         this.writer = scheduleRequestDto.getWriter();
         this.password = scheduleRequestDto.getPassword();
         this.writedate = scheduleRequestDto.getWritedate();
+        //생성시에는 생성날짜와 업데이트날짜가 동일하게.
+        this.updatedate = scheduleRequestDto.getWritedate();
     }
 }

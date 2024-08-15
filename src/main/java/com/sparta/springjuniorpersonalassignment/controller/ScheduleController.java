@@ -20,7 +20,7 @@ public class ScheduleController {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-
+    //일정 추가
     @PostMapping("/schedule")
     public ScheduleResponseDto schedule(@RequestBody ScheduleRequestDto scheduleRequestDto) {
 
@@ -30,6 +30,7 @@ public class ScheduleController {
 
     }
 
+    //일정 조회
     @GetMapping("/schedule/{id}")
     public ScheduleResponseDto getSchedule(@PathVariable Long id) {
         // 객체간 이동 위해 ScheduleService 객체 생성
@@ -43,5 +44,14 @@ public class ScheduleController {
     public List<ScheduleResponseDto> getAllSchedules() {
         ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
         return scheduleService.getAllSchedules();
+    }
+
+    //일정 목록 조회  -    수정일, 담당자명 으로 일정 목록을 전부 조회가능
+    @GetMapping("/schedule")
+    public List<ScheduleResponseDto> getSchedules(@RequestParam(required = false) String updateDate, @RequestParam(required = false) String writer){
+        //조건 중 한 가지만, 두 가지다 충족x, 둘 모두 충족 할 수있다.
+        ScheduleService scheduleService = new ScheduleService(jdbcTemplate);
+
+        return scheduleService.getConditionedSchedules(updateDate,writer);
     }
 }
